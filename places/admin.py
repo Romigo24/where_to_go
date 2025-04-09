@@ -24,7 +24,7 @@ class PlaceAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'type_image', 'image_preview')
+    list_display = ('image_preview', 'order')
     readonly_fields = ('image_preview', )
 
     def image_preview(self, obj):

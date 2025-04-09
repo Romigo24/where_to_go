@@ -23,13 +23,6 @@ class Place(models.Model):
         return self.title
     
 class Image(models.Model):
-    TYPE_IMAGE = [
-        ('first_image', 'Первая картинка'),
-        ('second_image', 'Вторая картинка')
-    ]
-
-    title = models.CharField(max_length=100, verbose_name='Название картинки')
-    type_image = models.CharField(max_length=50, choices=TYPE_IMAGE, verbose_name='Тип картинки')
     image = models.ImageField(verbose_name='Картинка')
     place = models.ForeignKey(
         Place,
@@ -39,6 +32,14 @@ class Image(models.Model):
         blank = True,
         null=True
         )
+    order = models.PositiveBigIntegerField(
+        default=0,
+        db_index=True,
+        verbose_name='Порядок',
+    )
+    
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return self.title
