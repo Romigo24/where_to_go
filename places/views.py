@@ -1,29 +1,36 @@
-from django.shortcuts import render
-from django.templatetags.static import static
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.urls import reverse
 from .models import Place
 import json
-import os
 
 
-def load_json():
-    places = []
-    static_dir = r'/Users/roma.kolyadayandex.ru/Desktop/where_to_go/static/places'
 
-    for filename in os.listdir(static_dir):
-        if filename.endswith('.json'):
-            filepath = os.path.join(static_dir, filename)
+def place_details(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    imgs = []
+    if place.first_image:
+        imgs.append(place.first_image.image.url)
 
-            with open(filepath, 'r', encoding='utf-8') as file:
-                place_data = json.load(file)
-                place_data['placeId'] = os.path.splitext(filename)[0]
-                places.append(place_data)
+    for image in place.second_image.all():
+        imgs.append(image.image.url)
 
-    return places
+    place_data = {
+        "title": place.title,
+        "imgs": imgs,
+        "description_short": place.short_description,
+        "description_long": place.long_description,
+        "coordinates": {
+            "lng": place.lng,
+            "lat": place.lat
+        }
+    }
+
+    return JsonResponse(place_data, json_dumps_params={'ensure_ascii': False, 'indent': 4})
 
 
 def index(request):
-    places = load_json()
+    places = Place.objects.all()
     features = []
 
     for place in places:
@@ -31,12 +38,12 @@ def index(request):
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [place["coordinates"]["lng"], place["coordinates"]["lat"]]
+                "coordinates": [place.lng, place.lat]
             },
             "properties": {
-                "title": place["title"],
-                "placeId": place["placeId"],
-                "detailsUrl": static(f'places/{place["placeId"]}.json')
+                "title": place.title,
+                "placeId": place.id,
+                "detailsUrl": reverse('place_details', args=[place.id])
             }
         }
         features.append(feature)
