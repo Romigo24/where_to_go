@@ -11,13 +11,13 @@ def place_details(request, place_id):
     images = place.images.all()
     imgs = [image.image.url for image in images]
     place_data = {
-        "title": place.title,
-        "imgs": imgs,
-        "description_short": place.short_description,
-        "description_long": place.long_description,
-        "coordinates": {
-            "lng": place.lng,
-            "lat": place.lat
+        'title': place.title,
+        'imgs': imgs,
+        'description_short': place.short_description,
+        'description_long': place.long_description,
+        'coordinates': {
+            'lng': place.lng,
+            'lat': place.lat
         }
     }
 
@@ -30,22 +30,22 @@ def index(request):
 
     for place in places:
         feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [place.lng, place.lat]
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [place.lng, place.lat]
             },
-            "properties": {
-                "title": place.title,
-                "placeId": place.id,
-                "detailsUrl": reverse('place_details', args=[place.id])
+            'properties': {
+                'title': place.title,
+                'placeId': place.id,
+                'detailsUrl': reverse('place_details', args=[place.id])
             }
         }
         features.append(feature)
 
     geojson = {
-        "type": "FeatureCollection",
-        "features": features
+        'type': 'FeatureCollection',
+        'features': features
     }
 
     geojson_str = json.dumps(geojson, ensure_ascii=False, indent=4)
