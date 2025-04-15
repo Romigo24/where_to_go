@@ -51,4 +51,3 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(
             f"Успешно: {place.title} | Картинок: {len(place_raw['imgs'])}"
         ))
-

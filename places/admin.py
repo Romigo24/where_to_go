@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 
 from .models import Place, Image
- 
+
 
 class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Image

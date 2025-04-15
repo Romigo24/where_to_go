@@ -30,9 +30,7 @@ class Image(models.Model):
         Place,
         on_delete=models.CASCADE,
         related_name='images',
-        verbose_name='Место',
-        blank = True,
-        null=True
+        verbose_name='Место'
         )
     order = models.PositiveBigIntegerField(
         default=0,
@@ -44,4 +42,4 @@ class Image(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return self.title
+        return f"Картинка для {self.place}"
