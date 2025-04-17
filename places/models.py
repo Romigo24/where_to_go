@@ -42,4 +42,4 @@ class Image(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"Картинка для {self.place}"
+        return f'Картинка для {self.place}'

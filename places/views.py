@@ -6,10 +6,13 @@ from .models import Place
 
 
 def place_details(request, place_id):
-    place = get_object_or_404(Place, id=place_id)
+    place = get_object_or_404(
+        Place.objects.prefetch_related('images'),
+        id=place_id
+    )
     images = place.images.all()
     imgs = [image.image.url for image in images]
-    place_data = {
+    place_information = {
         'title': place.title,
         'imgs': imgs,
         'description_short': place.short_description,
@@ -20,7 +23,7 @@ def place_details(request, place_id):
         }
     }
 
-    return JsonResponse(place_data, json_dumps_params={'ensure_ascii': False, 'indent': 4})
+    return JsonResponse(place_information, json_dumps_params={'ensure_ascii': False, 'indent': 4})
 
 
 def index(request):
